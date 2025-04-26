@@ -27,7 +27,9 @@ java -jar openapi-generator-cli.jar generate ^
   --group-id com.example ^
   --artifact-id rosterly ^
   --artifact-version 0.0.1-SNAPSHOT ^
-  --additional-properties=interfaceOnly=true,java8=true,skipDefaultInterface=true
+  --additional-properties=interfaceOnly=true,java8=true,skipDefaultInterface=true,^
+basePackage=com.example.rosterly,apiPackage=com.example.rosterly.api,modelPackage=com.example.rosterly.model,invokerPackage=com.example.rosterly.invoker
+
 
 if errorlevel 1 (
   echo [ERROR] コード生成に失敗しました。
