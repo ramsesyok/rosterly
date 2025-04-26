@@ -26,3 +26,15 @@ replay_pid*
 # OpenAPI Generator files
 openapi-generator-cli.jar
 /.metadata/
+
+# Visual Studio Code files
+/.vscode/
+
+# Maven files
+/target/
+/dependency-reduced-pom.xml
+/release.properties
+/pom.xml.tag
+/pom.xml.releaseBackup
+/pom.xml.versionsBackup
+/pom.xml.next
