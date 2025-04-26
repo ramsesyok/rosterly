@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Rosterly Member API
+  version: "1.0.0"
+  description: |
+    B社が提供する「作業者リスト（Member）」操作用 WebAPI。
+    - JSONフィールド名：キャメルケース  
+    - URLエンドポイント：ケバブケース
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /members:
+    get:
+      tags:
+        - Member
+      summary: メンバー一覧取得
+      parameters:
+        - in: query
+          name: companyId
+          schema:
+            type: integer
+          description: 会社IDで絞り込み（A社フロントで保持する Company リストの ID を渡す）
+      responses:
+        "200":
+          description: メンバー一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Member"
+    post:
+      tags:
+        - Member
+      summary: メンバー新規作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberCreate"
+      responses:
+        "201":
+          description: 作成完了
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+
+  /members/{memberId}:
+    parameters:
+      - $ref: "#/components/parameters/memberId"
+    get:
+      tags:
+        - Member
+      summary: 特定メンバー取得
+      responses:
+        "200":
+          description: メンバー詳細
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+    put:
+      tags:
+        - Member
+      summary: 特定メンバー更新
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberUpdate"
+      responses:
+        "200":
+          description: 更新完了
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+    delete:
+      tags:
+        - Member
+      summary: 特定メンバー削除
+      responses:
+        "204":
+          description: 削除完了
+
+components:
+  parameters:
+    memberId:
+      name: memberId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+      description: メンバーID
+
+  schemas:
+    Member:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          description: 作業者名（1〜50文字）
+        email:
+          type: string
+          format: email
+          description: RFC 5322 準拠
+        phone:
+          type: string
+          pattern: '^0[789]0-\\d{4}-\\d{4}$'
+        role:
+          type: string
+          enum:
+            - Developer
+            - Tester
+            - Manager
+        companyId:
+          type: integer
+          format: int32
+          description: 所属会社ID（A社フロントで管理する）
+        projectId:
+          type: integer
+          format: int32
+          description: プロジェクトID（将来拡張用）
+        joinDate:
+          type: string
+          format: date
+      required:
+        - name
+        - email
+        - role
+        - companyId
+        - joinDate
+
+    MemberCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 作業者名（1〜50文字）
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          pattern: '^0[789]0-\\d{4}-\\d{4}$'
+        role:
+          type: string
+          enum:
+            - Developer
+            - Tester
+            - Manager
+        companyId:
+          type: integer
+          format: int32
+        projectId:
+          type: integer
+          format: int32
+        joinDate:
+          type: string
+          format: date
+      required:
+        - name
+        - email
+        - role
+        - companyId
+        - joinDate
+
+    MemberUpdate:
+      allOf:
+        - $ref: "#/components/schemas/MemberCreate"
+      properties:
+        memberId:
+          type: integer
+          format: int32
+          readOnly: true
