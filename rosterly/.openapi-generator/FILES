@@ -1,0 +1,8 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/com/example/rosterly/api/ApiUtil.java
+src/main/java/com/example/rosterly/api/MembersApi.java
+src/main/java/com/example/rosterly/model/Member.java
+src/main/java/com/example/rosterly/model/MemberCreate.java
+src/main/java/com/example/rosterly/model/MemberUpdate.java
