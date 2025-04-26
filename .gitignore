@@ -31,7 +31,7 @@ openapi-generator-cli.jar
 /.vscode/
 
 # Maven files
-/target/
+/rosterly/target/
 /dependency-reduced-pom.xml
 /release.properties
 /pom.xml.tag
