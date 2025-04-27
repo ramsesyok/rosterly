@@ -19,25 +19,25 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-26T11:31:46.387646100+09:00[Asia/Tokyo]", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-27T10:12:24.329052600+09:00[Asia/Tokyo]", comments = "Generator version: 7.12.0")
 @Validated
 @Tag(name = "Member", description = "the Member API")
 public interface MembersApi {
+
+    default MembersApiDelegate getDelegate() {
+        return new MembersApiDelegate() {};
+    }
 
     /**
      * GET /members : メンバー一覧取得
@@ -61,9 +61,11 @@ public interface MembersApi {
         produces = { "application/json" }
     )
     
-    ResponseEntity<List<Member>> membersGet(
+    default ResponseEntity<List<Member>> membersGet(
         @Parameter(name = "companyId", description = "会社IDで絞り込み（A社フロントで保持する Company リストの ID を渡す）", in = ParameterIn.QUERY) @Valid @RequestParam(value = "companyId", required = false) Integer companyId
-    );
+    ) throws Exception {
+        return getDelegate().membersGet(companyId);
+    }
 
 
     /**
@@ -85,9 +87,11 @@ public interface MembersApi {
         value = "/members/{memberId}"
     )
     
-    ResponseEntity<Void> membersMemberIdDelete(
+    default ResponseEntity<Void> membersMemberIdDelete(
         @Parameter(name = "memberId", description = "メンバーID", required = true, in = ParameterIn.PATH) @PathVariable("memberId") Integer memberId
-    );
+    ) throws Exception {
+        return getDelegate().membersMemberIdDelete(memberId);
+    }
 
 
     /**
@@ -112,9 +116,11 @@ public interface MembersApi {
         produces = { "application/json" }
     )
     
-    ResponseEntity<Member> membersMemberIdGet(
+    default ResponseEntity<Member> membersMemberIdGet(
         @Parameter(name = "memberId", description = "メンバーID", required = true, in = ParameterIn.PATH) @PathVariable("memberId") Integer memberId
-    );
+    ) throws Exception {
+        return getDelegate().membersMemberIdGet(memberId);
+    }
 
 
     /**
@@ -141,10 +147,12 @@ public interface MembersApi {
         consumes = { "application/json" }
     )
     
-    ResponseEntity<Member> membersMemberIdPut(
+    default ResponseEntity<Member> membersMemberIdPut(
         @Parameter(name = "memberId", description = "メンバーID", required = true, in = ParameterIn.PATH) @PathVariable("memberId") Integer memberId,
         @Parameter(name = "MemberUpdate", description = "", required = true) @Valid @RequestBody MemberUpdate memberUpdate
-    );
+    ) throws Exception {
+        return getDelegate().membersMemberIdPut(memberId, memberUpdate);
+    }
 
 
     /**
@@ -170,8 +178,10 @@ public interface MembersApi {
         consumes = { "application/json" }
     )
     
-    ResponseEntity<Member> membersPost(
+    default ResponseEntity<Member> membersPost(
         @Parameter(name = "MemberCreate", description = "", required = true) @Valid @RequestBody MemberCreate memberCreate
-    );
+    ) throws Exception {
+        return getDelegate().membersPost(memberCreate);
+    }
 
 }

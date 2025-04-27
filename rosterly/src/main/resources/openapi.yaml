@@ -1,0 +1,250 @@
+openapi: 3.0.3
+info:
+  description: "B社が提供する「作業者リスト（Member）」操作用 WebAPI。\n- JSONフィールド名：キャメルケース  \n- URLエ\
+    ンドポイント：ケバブケース\n"
+  title: Rosterly Member API
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+paths:
+  /members:
+    get:
+      parameters:
+      - description: 会社IDで絞り込み（A社フロントで保持する Company リストの ID を渡す）
+        explode: true
+        in: query
+        name: companyId
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Member'
+                type: array
+          description: メンバー一覧
+      summary: メンバー一覧取得
+      tags:
+      - Member
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Member
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberCreate'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: 作成完了
+      summary: メンバー新規作成
+      tags:
+      - Member
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Member
+  /members/{memberId}:
+    delete:
+      parameters:
+      - description: メンバーID
+        explode: false
+        in: path
+        name: memberId
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: 削除完了
+      summary: 特定メンバー削除
+      tags:
+      - Member
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Member
+    get:
+      parameters:
+      - description: メンバーID
+        explode: false
+        in: path
+        name: memberId
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: メンバー詳細
+      summary: 特定メンバー取得
+      tags:
+      - Member
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Member
+    put:
+      parameters:
+      - description: メンバーID
+        explode: false
+        in: path
+        name: memberId
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberUpdate'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: 更新完了
+      summary: 特定メンバー更新
+      tags:
+      - Member
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Member
+components:
+  parameters:
+    memberId:
+      description: メンバーID
+      explode: false
+      in: path
+      name: memberId
+      required: true
+      schema:
+        format: int32
+        type: integer
+      style: simple
+  schemas:
+    Member:
+      example:
+        companyId: 6
+        role: Developer
+        joinDate: 2000-01-23
+        phone: phone
+        name: name
+        projectId: 1
+        email: email
+        memberId: 0
+      properties:
+        memberId:
+          format: int32
+          readOnly: true
+          type: integer
+        name:
+          description: 作業者名（1〜50文字）
+          type: string
+        email:
+          description: RFC 5322 準拠
+          format: email
+          type: string
+        phone:
+          pattern: "^0[789]0-\\\\d{4}-\\\\d{4}$"
+          type: string
+        role:
+          enum:
+          - Developer
+          - Tester
+          - Manager
+          type: string
+        companyId:
+          description: 所属会社ID（A社フロントで管理する）
+          format: int32
+          type: integer
+        projectId:
+          description: プロジェクトID（将来拡張用）
+          format: int32
+          type: integer
+        joinDate:
+          format: date
+          type: string
+      required:
+      - companyId
+      - email
+      - joinDate
+      - name
+      - role
+      type: object
+    MemberCreate:
+      example:
+        companyId: 0
+        role: Developer
+        joinDate: 2000-01-23
+        phone: phone
+        name: name
+        projectId: 6
+        email: email
+      properties:
+        name:
+          description: 作業者名（1〜50文字）
+          type: string
+        email:
+          format: email
+          type: string
+        phone:
+          pattern: "^0[789]0-\\\\d{4}-\\\\d{4}$"
+          type: string
+        role:
+          enum:
+          - Developer
+          - Tester
+          - Manager
+          type: string
+        companyId:
+          format: int32
+          type: integer
+        projectId:
+          format: int32
+          type: integer
+        joinDate:
+          format: date
+          type: string
+      required:
+      - companyId
+      - email
+      - joinDate
+      - name
+      - role
+      type: object
+    MemberUpdate:
+      allOf:
+      - $ref: '#/components/schemas/MemberCreate'
+      example:
+        memberId: 0
+      properties:
+        memberId:
+          format: int32
+          readOnly: true
+          type: integer

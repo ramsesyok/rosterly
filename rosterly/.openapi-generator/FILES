@@ -1,8 +1,16 @@
-.openapi-generator-ignore
 README.md
 pom.xml
+src/main/java/com/example/rosterly/OpenApiGeneratorApplication.java
+src/main/java/com/example/rosterly/RFC3339DateFormat.java
 src/main/java/com/example/rosterly/api/ApiUtil.java
 src/main/java/com/example/rosterly/api/MembersApi.java
+src/main/java/com/example/rosterly/api/MembersApiController.java
+src/main/java/com/example/rosterly/api/MembersApiDelegate.java
+src/main/java/com/example/rosterly/config/HomeController.java
+src/main/java/com/example/rosterly/config/SpringDocConfiguration.java
 src/main/java/com/example/rosterly/model/Member.java
 src/main/java/com/example/rosterly/model/MemberCreate.java
 src/main/java/com/example/rosterly/model/MemberUpdate.java
+src/main/resources/application.properties
+src/main/resources/openapi.yaml
+src/test/java/com/example/rosterly/OpenApiGeneratorApplicationTests.java

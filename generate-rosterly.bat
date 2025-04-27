@@ -17,7 +17,10 @@ REM -g spring：Spring Boot (Spring MVC) テンプレート
 REM -o .\generated：出力ディレクトリ
 REM --group-id / --artifact-id / --artifact-version：Maven の GAV
 REM interfaceOnly=true：Controller インタフェース＋モデルのみ生成
-REM skipDefaultInterface=true：デフォルト実装をスキップ
+REM delegatePattern=true：サーバーファイルをデリゲートパターンで生成
+REM useBeanValidation=true：Bean Validation API 注釈を有効化
+REM performBeanValidation=true：Bean Validation API を使ってバリデーション
+REM unhandledException=true：未処理の例外をハンドリング
 REM ===============================================
 
 java -jar openapi-generator-cli.jar generate ^
@@ -27,8 +30,18 @@ java -jar openapi-generator-cli.jar generate ^
   --group-id com.example ^
   --artifact-id rosterly ^
   --artifact-version 0.0.1-SNAPSHOT ^
-  --additional-properties=interfaceOnly=true,java8=true,skipDefaultInterface=true,^
-basePackage=com.example.rosterly,apiPackage=com.example.rosterly.api,modelPackage=com.example.rosterly.model,invokerPackage=com.example.rosterly.invoker
+  --additional-properties=^
+basePackage=com.example.rosterly,^
+apiPackage=com.example.rosterly.api,^
+modelPackage=com.example.rosterly.model,^
+configPackage=com.example.rosterly.config,^
+invokerPackage=com.example.rosterly.invoker,^
+documentationProvider=springdoc,^
+delegatePattern=true,^
+useBeanValidation=true,^
+performBeanValidation=true,^
+unhandledException=true,^
+booleanGetterPrefix=is
 
 
 if errorlevel 1 (
@@ -38,3 +51,24 @@ if errorlevel 1 (
 ) else (
   echo [OK] rosterly プロジェクトを生成しました: "%OUTPUT_DIR%"
 )
+
+
+
+REM ==================================================
+REM unhandledException 
+REM 生成された Controller を直接触らずに、Delegate 内で例外を投げれば OK。
+REM Spring のグローバル例外ハンドラ（@ControllerAdvice）を１箇所用意することで、
+REM 全エンドポイントの例外マッピングを一元管理できます。
+REM --------------------------------------------
+REM @ControllerAdvice
+REM public class GlobalExceptionHandler {
+REM     @ExceptionHandler(MyBusinessException.class)
+REM     public ResponseEntity<ErrorResponse> handleBusiness(MyBusinessException ex) {
+REM         return ResponseEntity
+REM             .status(HttpStatus.BAD_REQUEST)
+REM             .body(new ErrorResponse("BUSINESS_ERROR", ex.getMessage()));
+REM     }
+REM     // 他の例外ハンドラ...
+REM }
+REM --------------------------------------------
+REM ==================================================
